@@ -128,6 +128,10 @@ function OpenHeroPage(){
 function OpenEquipmentInfoDialog(){
 	gn.tools.log('OpenEquipmentInfoDialog', 0);
 	var found = images.plusEquipment2.find({tries:2, confirms:2});
+	// some time is not going to work for strange reason , we try to find it using another picutre
+	if(found === undefined){
+	   found = images.plusEquipment.find({tries:2, confirms:2});
+	}
     if(found !== undefined){
         var area = new Image('PlusEquipment2', 0.9, [found[0].X, found[0].Y, 300, 100]);
         if(area.tap({tries:2, confirms:2})){
