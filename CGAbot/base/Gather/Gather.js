@@ -462,6 +462,7 @@ function move(){
   for(var i = 0; i < 2; i++){
     loop1: switch(this.state.move[i]){
       case 'up':
+        // left/right , ??? ,??? ,up/down ,???
         gn.player.input.customSwipe(5, 320, 5, 570, 1000); //+250
         break loop1;
       case 'down':

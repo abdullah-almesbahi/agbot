@@ -1,1 +1,10 @@
-{"product":"CGAbot","name":"Equipment","checksum":"549296ab89100865474ba076d3747dc7","path":"base/Equipment","images":{},"author":"GNBots","title":"","description":"","tag":""}
+{
+  "product": "CGAbot",
+  "name": "Equipment",
+  "checksum": "bce25876df9944ed472b5c8879020888",
+  "path": "base/Equipment",
+  "author": "GNBots",
+  "description": "",
+  "tag": "",
+  "images": {}
+}
