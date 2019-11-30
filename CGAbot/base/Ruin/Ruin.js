@@ -18,7 +18,11 @@ var state = {
 };
 
 var images = {
-  herosIcon : new Image('HerosIcon', 0.9, [83, 638, 21, 13]),
+  canCollect : new Image('CanCollect', 0.9, [215, 418, 8, 12]),
+  ruinIcon : new Image('RuinIcon', 0.9, [202, 431, 11, 20]),
+  mysticQuarryIcon : new Image('MysticQuarryIcon', 0.9, [353, 175, 15, 17]),
+  collectButton : new Image('CollectButton', 0.9, [173, 597, 21, 14]),
+  enabledExcavateButton:  new Image('EnabledExcavateButton', 0.9, [171, 600, 20, 13])
 }
 
 function reset(){
@@ -53,8 +57,33 @@ function Pulse(){
 }
 
 function ruin(){
-	gn.player.input.customSwipe(100, 190, 315, 380, 1500);
-    return false;
+	// speed = 1500 
+	gn.player.input.customSwipe(0, 130, 415, 500, 1500);
+	gn.tools.wait(1000);
+	gn.player.input.tap(222, 362);
+	gn.tools.wait(1000);
+	if(images.ruinIcon.tap({tries:2,confirms:2})){
+		gn.tools.wait(1000);
+       if(images.mysticQuarryIcon.tap({tries:2,confirms:2})){
+       	  // if can collect
+       	  if(images.collectButton.find({tries:2,confirms:2})){
+       	  	 // press on collect button
+       	  	 images.collectButton.tap({tries:2,confirms:2});
+       	  	 gn.tools.wait(1000);
+       	  	 // close results dialog
+       	  	 gn.player.input.tap(138, 50);
+       	  }
+
+       	  // if can Excavate Button clickable
+       	  if(images.enabledExcavateButton.find({tries:2,confirms:2})){
+       	  	 images.enabledExcavateButton.tap({tries:2,confirms:2});
+       	  	 gn.tools.wait(1000);
+       	  }
+          
+       } 
+	}
+    gn.tools.log('Ruin done', 0);
+    this.state.ruin = false;
 }
 
 
