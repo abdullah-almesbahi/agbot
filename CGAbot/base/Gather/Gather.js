@@ -37,7 +37,7 @@ var cfg = {
   strongerAttack:false,
   Rebel:true,
   Camp:false,
-  Food:true,
+  Food:false,
   Lumber:false,
   Ore:false,
   Intruder:false,
@@ -197,6 +197,7 @@ function Start(){
 function Pulse(){
 
   if(this.state.line == 0){
+    // make sure this is world map screen other wise do not continue
     if(!_wb.check()){
       return;
     }
@@ -218,6 +219,7 @@ function Pulse(){
   //city buff end
 
   //vip
+  // tap search menu and double check search button is exists
   if(cfg.vip && this.state.vip){
 
     if(this.state.line == 0){
@@ -225,6 +227,7 @@ function Pulse(){
         this.state.line = 'search';
       }
     }
+
 
     if(this.state.line == 'search'){
       if(vipSearch()){
@@ -367,7 +370,11 @@ function vipSearch(){
       gn.player.input.tap(tile[0], tile[1]);
       for(var i = 0; i < this.state[x]; i++){
         if(setLevel(x)){
+          // click on the center of map and show resourse options
           gn.player.input.tap(200, 330);
+          if(!_tb.canSendRebel()){
+              return;
+          }
           if(_tb.gather()){
             if(_tb.march(cfg.strongerAttack)){
               gn.tools.log('Send: ' + x, 0);
