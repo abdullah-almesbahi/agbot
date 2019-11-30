@@ -1,5 +1,3 @@
-var _base = Include("base/Base/Base.js");
-var _ab = Include("base/AllianceBase/AllianceBase.js");
 var _util = IncludeExt("General/Util/Util.js");
 var _town = Include("base/TownBase/TownBase.js");
 var _f = IncludeExt("General/Framework/Framework.js");
@@ -18,16 +16,13 @@ var state = {
 };
 
 var images = {
-  //Research
   herosIcon : new Image('HerosIcon', 0.9, [83, 638, 21, 13]),
   heroCampScreen : new Image('HeroCampScreen', 0.9, [209, 16, 34, 13]),
   plusEquipment : new Image('PlusEquipment', 0.9, [1, 0, 403, 652]),
   plusEquipment2 : new Image('PlusEquipment2', 0.9, [355, 323, 3, 18]),
   craftButton : new Image('CraftButton', 0.9, [182, 450, 18, 13]),
   equipmentInfoDialog: new Image('EquipmentInfoDialog', 0.9, [145, 76, 19, 17]),
-  //0, 0, 303, 13
   equipmentRed : new Image('EquipmentRed', 0.9, [290, 484, 403, 652]),
-  //equipmentRed : new Image('EquipmentRed', 0.9, [1, 0, 403, 652]),
   sweepAllButton: new Image('SweepAllButton', 0.9, [91, 425, 19, 15]),
   canCraft : new Image('CanCraft', 0.9, [186, 537, 17, 16]),
   obtainButton: new Image('ObtainButton', 0.9, [179, 450, 21, 11])
@@ -92,11 +87,12 @@ function doEquipment(){
 function PressHerosIcon(){
 	gn.tools.log('PressHerosIcon', 0);
     if(images.herosIcon.tap({tries:2,confirms:0})){
-    	if(images.heroCampScreen.find({tries:2,confirms:2})){
+    	// TODO: this is not going to work if received new here at top of page
+    	// if(images.heroCampScreen.find({tries:2,confirms:2})){
     	    return true;
-        } else {
-        	return false;
-        }
+        // } else {
+        	// return false;
+        // }
     } else {
     	return false;
     }	
@@ -106,12 +102,10 @@ function OpenHeroPage(){
 	gn.tools.log('OpenHeroPage', 0);
 
 	var found = images.plusEquipment.find({tries:2, confirms:2});
-	gn.tools.log('OpenHeroPage'+found, 0);
 	if(found !== undefined){
 		var area = new Image('PlusEquipment', 0.9, [found[0].X, found[0].Y,found[0].Width, found[0].Height]);
         // open hero page
         if(area.tap({tries:2, confirms:2})){
-        	gn.tools.log('worked'+found, 0);
             gn.tools.wait(2000);
             return true;
         } else {
@@ -147,13 +141,17 @@ function OpenEquipmentInfo2Dialog(){
 	gn.tools.log('OpenEquipmentInfo2Dialog', 0);
 	 // check if craft or obtain button
 	if(images.obtainButton.find({tries:2, confirms:2})){
+		gn.tools.log('Found Obtain button', 0);
 		images.obtainButton.tap({tries:2, confirms:2});
 		gn.tools.wait(2000);
 	    return true;
 	} else if(images.craftButton.find({tries:2, confirms:2})) {
+
 		if(images.craftButton.tap({tries:2, confirms:2})){
+			
 			// make sure equipment Info Dialog exists
-			if(images.equipmentInfoDialog.find({tries:2, confirms:2})){
+			// TODO: when there is news , this is not going to work
+			//if(images.equipmentInfoDialog.find({tries:2, confirms:2})){
 
 	            // if equipment can be craft , then do it
 				
@@ -165,7 +163,7 @@ function OpenEquipmentInfo2Dialog(){
 					// doEquipment();
 				} else{
 					var foundEquipmentRed = images.equipmentRed.find({tries:2, confirms:2});
-	           
+	       
 		            if(foundEquipmentRed !== undefined){
 		            	gn.tools.wait(2000);
 						gn.player.input.tap(foundEquipmentRed[0].X, foundEquipmentRed[0].Y-27)
@@ -175,7 +173,7 @@ function OpenEquipmentInfo2Dialog(){
 				}
 	            
 	            
-			}
+			//}
 
 		}
 	}
