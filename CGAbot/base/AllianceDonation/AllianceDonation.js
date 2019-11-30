@@ -32,10 +32,12 @@ var images = {
   donateBtn:new Image('DonateBtn', 0.9, [293, 139, 96, 64]),
   speedUpBtn:new Image('SpeedUpBtn', 0.9, [298, 252, 87, 48]),
   spendBtn:new Image('SpendBtn', 0.9, [213, 403, 154, 56]),
+
+  indicatorTech:new Image('IndicatorTech', 0.9, [82, 158, 51, 47]),
+  donationCollectBtn:new Image('DonationCollectBtn', 0.9, [106, 507, 196, 70]),
   //gifts
   indicatorGifts:new Image('IndicatorGifts', 0.9, [53, 39, 52, 52]),
   collectAllGifts:new Image('CollectAllGifts', 0.9, [299, 121, 93, 465]),
-  reward1 : new Image('Reward1', 0.9, [79, 93, 5, 12]),
 }
 
 function Start(){
@@ -59,9 +61,10 @@ function Pulse(){
     if(_ab.allianceMenu()){
       if(_ab.allianceAction('guildResearch')){
         if(allianceDonation()){
+          if(menu()){
+            collectRewards()
+          }
           gn.tools.log('Alliance Research done', 0);
-          images.reward1.tap({tries:1, confirms:1});
-          gn.tools.log('Collect Reward1 done', 0);
           this.state.allianceDonation = false;
         }
       }
@@ -109,7 +112,6 @@ function allianceGift(){
 
 function allianceDonation(){
   Print('donation');
-
   if(images.indicatorResearch.find({tries:4, confirms:2})){
     //
     open();
@@ -148,6 +150,35 @@ function open(){
       gn.tools.log('Open Donation or SpeedUp', 0);
     }
   }
+}
+
+function menu() {
+  for(var i = 0; i < 5; i++){
+    if(images.indicatorTech.find({tries:3, confirms:2})){
+      return true;
+    }
+    gn.player.input.tap(200, 10);
+  }
+  gn.tools.log('Failed to find tech menu', 0);
+}
+
+function collectRewards() {
+  let pos = {
+    box1:[70, 95],
+    box2:[170, 95],
+    box3:[270, 95],
+    box4:[370, 95],
+  }
+  for(var x in pos){
+    gn.player.input.tap(pos[x][0], pos[x][1]);
+    if(images.donationCollectBtn.tap({tries:3, confirms:1})){
+      gn.tools.log('Collect Reward', 0);
+    }
+    menu();
+  }
+
+
+
 }
 
 function Finish(){

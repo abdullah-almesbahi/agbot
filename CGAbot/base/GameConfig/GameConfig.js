@@ -49,7 +49,10 @@
           }
         }}),
         // attackHelp:new Image('AttackHelp', 0.93, [174, 176, 51, 47], {onTap: function(){ gn.player.input.tap(200, 20)}}),
-        congrats:new Image('CongratsInfo', 0.9, [341, 160, 48, 209], {onTap: function(){ gn.player.input.tap(200, 20)}}),
+        reconnect:new Image('ReconnectBtn', 0.94, [238, 388, 55, 35]),
+        rebuild:new Image('RebuildBtn', 0.94, [158, 386, 57, 39]),
+        vip:new Image('VipUp', 0.93, [67, 183, 61, 65], {onTap: function(){ gn.player.input.tap(200, 10)}}),
+        congrats:new Image('CongratsInfo', 0.9, [355, 70, 27, 303], {onTap: function(){ gn.player.input.tap(200, 10)}}),
         talkBox:new Image('TalkBox', 0.9, [347, 586, 37, 47]),
         yesBtn:new Image('YesBtn', 0.94, [179, 536, 38, 31]),
         listRight:new Image('ListRight', 0.96, [358, 242, 21, 100]),

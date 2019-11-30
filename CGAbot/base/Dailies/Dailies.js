@@ -12,12 +12,12 @@ var tooltips = {
 var cfg = {
   skip:0,
   FountainWish:{
-    value:'food',
+    value:'off',
     options:['off', 'food', 'lumber', 'iron'],
   },
   HeroesHall:false,
   Quest:false,
-  LoginGift:false,
+  LoginGift:true,
   Activities:false,
 };
 
