@@ -74,6 +74,42 @@
         }
       }
     },
+    resource:{
+      images:{
+        indicatorNotEnough:new Image('IndicatorNotEnough', 0.9, [325, 263, 48, 259]),
+        indicatorRed:new Image('IndicatorRedResource', 0.94, [99, 87, 225, 32]),
+        indicatorResourceMenu:new Image('IndicatorResourceMenu', 0.9, [23, 45, 47, 46]),
+        resourceUseBtn:new Image('ResourceUseBtn', 0.9, [303, 135, 91, 497]),
+        resourceYesBtn:new Image('ResourceYesBtn', 0.9, [163, 408, 70, 49]),
+      },
+      usePacks:function() {
+        if(this.images.indicatorNotEnough.tap({tries:3, confirms:2})){
+          if(this.images.indicatorResourceMenu.find({tries:5, confirms:1})){
+            while(true){
+              if(!this.images.indicatorRed.find({tries:4, confirms:1})){
+                Print('Enough resources for stack')
+                gn.player.input.tap(24, 24);
+                return 'checkAgain'
+              }
+              if(!this.images.resourceUseBtn.tap({tries:4, confirms:2})){
+                gn.tools.log('Not enough resources packs', 0);
+                return false;
+              }
+              if(this.images.resourceYesBtn.tap({tries:4, confirms:2})){
+                Print('using stack')
+                gn.tools.wait(2000);
+              }else{
+                gn.tools.log('Cannot use packs', 0);
+                gn.player.input.tap(24, 24);
+                gn.player.input.tap(24, 24);
+                break;
+              }
+            }
+          }
+        }
+        return true
+      }
+    },
     refs:{
       starts:{
         topLeft:{

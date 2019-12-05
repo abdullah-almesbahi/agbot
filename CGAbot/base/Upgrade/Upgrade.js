@@ -14,8 +14,10 @@ var tooltips = {
 var cfg = {
   skip:0,
   //
+  useResourcePacks:false,
+
   Upgrade:{
-    value:'resources',
+    value:'mainHall',
     options:['mainHall', 'resources'],
   },
   //
@@ -184,6 +186,25 @@ function checkUpgrade(){
     gn.tools.log('Jump to next building', 0);
     return false;
   }
+
+  //use usePacks
+  if(cfg.useResourcePacks){
+    while(true){
+      let result = _town.resource.usePacks();
+      if(result == true){
+        gn.tools.log('Enough Resources', 0);
+        break;
+      }else if(result == 'checkAgain'){
+        //
+      }else{
+        gn.tools.log('Not Enough Resources', 0);
+        this.state.upgrade = false;
+        break;
+      }
+    }
+    if(!this.state.upgrade){return}
+  }
+  //
 
   if(images.upgradeBtn.tap({tries:1, confirms:1})){
     if(images.indicatorQueueFull.find({tries:5, confirms:2})){

@@ -25,7 +25,8 @@ var images = {
   equipmentRed : new Image('EquipmentRed', 0.9, [290, 484, 403, 652]),
   sweepAllButton: new Image('SweepAllButton', 0.9, [91, 425, 19, 15]),
   canCraft : new Image('CanCraft', 0.9, [186, 537, 17, 16]),
-  obtainButton: new Image('ObtainButton', 0.9, [179, 450, 21, 11])
+  obtainButton: new Image('ObtainButton', 0.9, [179, 450, 21, 11]),
+  equip : new Image('Equip', 0.9, [179, 444, 17, 21])
 }
 
 function Start(){
@@ -101,28 +102,37 @@ function PressHerosIcon(){
 function OpenHeroPage(){
 	gn.tools.log('OpenHeroPage', 0);
 
-	var found = images.plusEquipment.find({tries:2, confirms:2});
+  var chose = 1;
+	
+  // if(found === undefined){
+  //    found = images.plusEquipment2.find({tries:2, confirms:2});
+  //    chose = 2;
+  // }
+  for(var i = 0; i < 30; i++){
+     var found = images.plusEquipment.find({tries:2, confirms:2});
+     if(found === undefined){
+        gn.player.input.Swipe(2, 1000, 50, false);
+        gn.tools.wait(2000);
+     } else {
+       break;
+     }
+  }
+
 	if(found !== undefined){
-		var area = new Image('PlusEquipment', 0.9, [found[0].X, found[0].Y,found[0].Width, found[0].Height]);
-        // open hero page
-        if(area.tap({tries:2, confirms:2})){
-            gn.tools.wait(2000);
-            return true;
-        } else {
-        	gn.tools.log('not worked'+found, 0);
-        	return false;
-        }
+		  // var area = new Image(chose=== 1?'PlusEquipment':'PlusEquipment2', 0.9, [found[0].X, found[0].Y,found[0].Width, found[0].Height]);
+      // open hero page
+      gn.player.input.tap(found[0].X, found[0].Y);
+      gn.tools.wait(2000);
+      return true;
+      // if(area.tap({tries:2, confirms:2})){
+      //     gn.tools.wait(2000);
+      //     return true;
+      // } else {
+      // 	gn.tools.log('not worked'+found, 0);
+      // 	return false;
+      // }
 	} else {
-		// TODO: swipe down
-		gn.player.input.Swipe(2, 1000, 50, false);
-		gn.tools.wait(2000);
-		if(OpenHeroPage()){
-			return true;
-		} else{
-			return false;
-		}
-		//return false;
-		
+		return false;
 	}
 }
 function OpenEquipmentInfoDialog(){
@@ -132,27 +142,37 @@ function OpenEquipmentInfoDialog(){
 	if(found === undefined){
 	   found = images.plusEquipment.find({tries:2, confirms:2});
 	}
-    if(found !== undefined){
-        var area = new Image('PlusEquipment2', 0.9, [found[0].X, found[0].Y, 300, 100]);
-        if(area.tap({tries:2, confirms:2})){
-            gn.tools.wait(2000);
-            return true;
-        }
-    }
-    return false;
+  if(found !== undefined){
+      var area = new Image('PlusEquipment2', 0.9, [found[0].X, found[0].Y, 300, 100]);
+      if(area.tap({tries:2, confirms:2})){
+          gn.tools.wait(2000);
+          return true;
+      }
+  }
+  return false;
 }
 function OpenEquipmentInfo2Dialog(){
 	gn.tools.log('OpenEquipmentInfo2Dialog', 0);
-	 // check if craft or obtain button
+	 // check if craft  , Equiop or obtain button
 	if(images.obtainButton.find({tries:2, confirms:2})){
 		gn.tools.log('Found Obtain button', 0);
 		images.obtainButton.tap({tries:2, confirms:2});
 		gn.tools.wait(2000);
-	    return true;
-	} else if(images.craftButton.find({tries:2, confirms:2})) {
+	  return true;
+	} else if(images.equip.find({tries:2, confirms:2})) {
+    images.equip.tap({tries:2, confirms:2});
+
+    // try reset
+    if(OpenEquipmentInfoDialog()){
+      if(OpenEquipmentInfo2Dialog()){
+        return true;
+      }
+    }
+    
+  } else if(images.craftButton.find({tries:2, confirms:2})) {
 
 		if(images.craftButton.tap({tries:2, confirms:2})){
-			
+
 			// make sure equipment Info Dialog exists
 			// TODO: when there is news , this is not going to work
 			//if(images.equipmentInfoDialog.find({tries:2, confirms:2})){
@@ -170,9 +190,9 @@ function OpenEquipmentInfo2Dialog(){
 	       
 		            if(foundEquipmentRed !== undefined){
 		            	gn.tools.wait(2000);
-						gn.player.input.tap(foundEquipmentRed[0].X, foundEquipmentRed[0].Y-27)
-						gn.tools.wait(2000);
-		                return true;
+      						gn.player.input.tap(foundEquipmentRed[0].X, foundEquipmentRed[0].Y-27)
+      						gn.tools.wait(2000);
+		              return true;
 		            }
 				}
 	            
