@@ -76,23 +76,30 @@
     },
     resource:{
       images:{
-        indicatorNotEnough:new Image('IndicatorNotEnough', 0.9, [325, 263, 48, 259]),
+        indicatorNotEnough:new Image('IndicatorNotEnough', 0.9, [302, 256, 82, 313]),
         indicatorRed:new Image('IndicatorRedResource', 0.94, [99, 87, 225, 32]),
         indicatorResourceMenu:new Image('IndicatorResourceMenu', 0.9, [23, 45, 47, 46]),
         resourceUseBtn:new Image('ResourceUseBtn', 0.9, [303, 135, 91, 497]),
         resourceYesBtn:new Image('ResourceYesBtn', 0.9, [163, 408, 70, 49]),
       },
-      usePacks:function() {
-        if(this.images.indicatorNotEnough.tap({tries:3, confirms:2})){
+      usePacks:function(value, usePacks) {
+        if(value == undefined){value == false}
+        if(usePacks == undefined){usePacks == false}
+        if(value || this.images.indicatorNotEnough.tap({tries:3, confirms:2})){
           if(this.images.indicatorResourceMenu.find({tries:5, confirms:1})){
             while(true){
               if(!this.images.indicatorRed.find({tries:4, confirms:1})){
                 Print('Enough resources for stack')
-                gn.player.input.tap(24, 24);
+                this.quitResource();
                 return 'checkAgain'
+              }
+              if(usePacks == false){
+                this.quitResource();
+                return false;
               }
               if(!this.images.resourceUseBtn.tap({tries:4, confirms:2})){
                 gn.tools.log('Not enough resources packs', 0);
+                this.quitResource();
                 return false;
               }
               if(this.images.resourceYesBtn.tap({tries:4, confirms:2})){
@@ -100,14 +107,21 @@
                 gn.tools.wait(2000);
               }else{
                 gn.tools.log('Cannot use packs', 0);
-                gn.player.input.tap(24, 24);
-                gn.player.input.tap(24, 24);
+                this.quitResource();
                 break;
               }
             }
           }
         }
         return true
+      },
+      quitResource:function() {
+        Print('get out')
+        while(!this.images.indicatorResourceMenu.find({tries:3, confirms:1})){
+          gn.player.input.tap(200, 10);
+        }
+        gn.player.input.tap(24, 24);
+        return true;
       }
     },
     refs:{

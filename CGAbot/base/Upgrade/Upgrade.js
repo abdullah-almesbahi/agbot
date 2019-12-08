@@ -190,7 +190,7 @@ function checkUpgrade(){
   //use usePacks
   if(cfg.useResourcePacks){
     while(true){
-      let result = _town.resource.usePacks();
+      let result = _town.resource.usePacks(false);
       if(result == true){
         gn.tools.log('Enough Resources', 0);
         break;

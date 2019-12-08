@@ -39,6 +39,7 @@
         }
       },
       popups:{
+        vipMenu:new Image('VipMenu', 0.9, [11, 413, 55, 51], {onTap: function(){ gn.player.input.tap(200, 50)}}),
         allianceHelp:new Image('AllianceHelp', 0.9, [295, 356, 96, 206]),
         singIn:new Image('SignIn', 0.9, [262, 587, 60, 54]),
         warSupport:new Image('WarSupport', 0.96, [340, 324, 58, 135], {onTap: function(){

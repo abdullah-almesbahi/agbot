@@ -26,6 +26,9 @@
         //
         attack:new Image('AttackBtn', 0.9, [36, 489, 142, 42]), //normal
         attack:new Image('AttackBtn', 0.9, [210, 488, 159, 44]), //strong
+
+        yesRally:new Image('YesRallyBtn', 0.9, [176, 453, 51, 34]),
+        rallyBtn:new Image('RallyBtn', 0.92, [257, 468, 54, 43]),
         //
         indicatorGatherMenu:new Image('IndicatorGatherMenu', 0.9, [244, 574, 51, 43]),
         capacityFull:new Image('CapacityFull', 0.9, [126, 552, 131, 18]),
@@ -33,7 +36,6 @@
         expeditionBtn:new Image('ExpeditionBtn', 0.9, [227, 606, 149, 38]),
         infoVip:new Image('InfoVip', 0.9, [24, 358, 353, 118]),
         lessTroops:new Image('LessTroops', 0.9, [40, 360, 147, 134]),
-        rebelOutOfPower: new Image('RebelOutOfPower', 0.9, [299, 470, 17, 14])
       },
       scan:function(list){
         for(var x in this.tiles.rss){
@@ -52,28 +54,25 @@
           }
         }
       },
-      canSendRebel: function (){
-        if(this.images.rebelOutOfPower.find({tries:2, confirms:2})){
-          Print('Rebel Out of Power');
-          return false;
-        }
-        return true;
-      },
       gather:function(attack){
         gn.tools.wait(3000);
-        // Farms, sawmill , Mine
         if(this.images.infoBtn.find({tries:2, confirms:2}) && this.images.gatherBtn.tap({tries:1, confirms:1})){
           return true;
-          // Rebel
         }else if(attack && this.images.attack.tap()){
           return true;
-          // Rebel
         }else if(!attack && this.images.attack.tap()){
           return true;
+        }else if(this.images.rallyBtn.tap()){
+          if(this.images.yesRally.find({tries:5, confirms:1})){
+            gn.player.input.tap(80, 365);
+            if(this.images.yesRally.tap({tries:2, confirms:2})){
+              return true;
+            }
+          }
+
         }
       },
       march:function(){
-        // Hero Deployment
         if(this.images.indicatorGatherMenu.find({tries:2, confirms:2})){
           for(var i = 0; i < 8; i++){
               if(i<4){

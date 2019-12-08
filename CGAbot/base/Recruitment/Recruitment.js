@@ -23,6 +23,8 @@ var cfg = {
   Workshop:true,
   //
   Heal:true,
+
+  useResourcePacks:true,
 };
 
 var state = {
@@ -124,13 +126,28 @@ function hosptial(){
 
 function heal(){
   if(images.indicatorUnitsMenu.find({tries:4, confirms:2})){
-    if(images.notEnough.find({tries:1, confirms:1})){
-      gn.player.input.tap(30, 20);
-      gn.tools.wait(1000);
-      gn.player.input.tap(30, 20);
-      gn.tools.log('Not enough resources', 0);
-      return true;
+    while(true){
+      let result = _town.resource.usePacks(false, cfg.useResourcePacks);
+      if(result == true){
+        // gn.tools.log('Enough Resources', 0);
+        break;
+      }else if(result == 'checkAgain'){
+        //
+      }else{
+        gn.tools.log('Not Enough Resources', 0);
+        gn.player.input.tap(30, 20);
+        gn.tools.wait(1000);
+        gn.player.input.tap(30, 20);
+        return true;
+      }
     }
+    // if(images.notEnough.find({tries:1, confirms:1})){
+    //   gn.player.input.tap(30, 20);
+    //   gn.tools.wait(1000);
+    //   gn.player.input.tap(30, 20);
+    //   gn.tools.log('Not enough resources', 0);
+    //   return true;
+    // }
     if(images.trainBtn.tap({tries:1, confirms:1})){
       gn.tools.wait(1000);
       gn.player.input.tap(30, 20);
@@ -164,15 +181,27 @@ function recruit(){
 }
 
 function train(){
-  if(images.indicatorUnitsMenu.find({tries:4, confirms:2})){
+  if(images.indicatorUnitsMenu.find({tries:6, confirms:2})){
     setLevel();
-    if(images.notEnough.find({tries:1, confirms:1})){
-      gn.player.input.tap(30, 20);
-      gn.tools.wait(1000);
-      gn.player.input.tap(30, 20);
-      gn.tools.log('Not enough resources', 0);
-      return true;
-    }
+    //packs resources
+      while(true){
+        let result = _town.resource.usePacks(false, cfg.useResourcePacks);
+        if(result == true){
+          // gn.tools.log('Enough Resources', 0);
+          break;
+        }else if(result == 'checkAgain'){
+          //
+        }else{
+          gn.tools.log('Not Enough Resources', 0);
+          gn.player.input.tap(30, 20);
+          gn.tools.wait(1000);
+          gn.player.input.tap(30, 20);
+          return true;
+        }
+      }
+    // if(images.notEnough.find({tries:1, confirms:1})){
+    //
+    // }
     if(images.trainBtn.tap({tries:1, confirms:1})){
       gn.tools.wait(1000);
       gn.player.input.tap(30, 20);
@@ -187,9 +216,11 @@ function setLevel(){
   gn.player.input.tap(221, 534);
   //
   gn.tools.log('Troops level: ' + cfg.Level.value , 0);
-  if(cfg.Level.value == 'lowest'){
-    gn.player.input.customSwipe(20, 405, 450, 405, 1200);
-  }
+  // if(cfg.Level.value == 'lowest'){
+  //   gn.tools.wait(1000);
+  //   gn.player.input.customSwipe(115, 405, 450, 405, 500);
+  //   gn.player.input.customSwipe(115, 405, 450, 405, 500);
+  // }
 }
 
 function Finish(){
