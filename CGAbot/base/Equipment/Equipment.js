@@ -13,6 +13,7 @@ var cfg = {
 
 var state = {
  equipment:true,
+ findAnother:0,
 };
 
 var images = {
@@ -26,7 +27,9 @@ var images = {
   sweepAllButton: new Image('SweepAllButton', 0.9, [91, 425, 19, 15]),
   canCraft : new Image('CanCraft', 0.9, [186, 537, 17, 16]),
   obtainButton: new Image('ObtainButton', 0.9, [179, 450, 21, 11]),
-  equip : new Image('Equip', 0.9, [179, 444, 17, 21])
+  equip : new Image('Equip', 0.9, [179, 444, 17, 21]),
+  fightButton : new Image('FightButton', 0.9, [175, 541, 29, 9]),
+  craftButton2: new Image('CraftButton2', 0.9, [179, 536, 22, 13])
 }
 
 function Start(){
@@ -44,11 +47,19 @@ function Pulse(){
     return
   }
 
-  if(cfg.Equipment.value !== 'off' && this.state.equipment){
+
+  if(cfg.Equipment.value !== 'off' && this.state.equipment ){
     gn.tools.log('Equipment', 0);
 
     if(doEquipment()){
     	// nothing
+    } else {
+      this.state.findAnother = this.state.findAnother+45;
+      gn.tools.log('close all dialog', 0);
+      return;
+      
+      // if not possible to sweep all , close all dialog and repeat with another hero
+   
     }
     this.state.equipment = false;
   }else{
@@ -67,8 +78,12 @@ function doEquipment(){
     		if(OpenEquipmentInfoDialog()){
                 if(OpenEquipmentInfo2Dialog()){
                     if(OpenCraftingRequirment()){
-                    	doSweepAll();
-                    	return true;
+                    	if(doSweepAll()){
+                        return true;
+                      } else{
+                        return false;
+                      }
+                    	
                     } else{
                     	gn.tools.log('failed OpenCraftingRequirment', 0);
                     }
@@ -102,6 +117,10 @@ function PressHerosIcon(){
 function OpenHeroPage(){
 	gn.tools.log('OpenHeroPage', 0);
 
+  if(this.state.findAnother > 0){
+    gn.player.input.Swipe(2, 1000, this.state.findAnother, false);
+    gn.tools.wait(2000);
+  }
   var chose = 1;
 	
   // if(found === undefined){
@@ -121,7 +140,7 @@ function OpenHeroPage(){
 	if(found !== undefined){
 		  // var area = new Image(chose=== 1?'PlusEquipment':'PlusEquipment2', 0.9, [found[0].X, found[0].Y,found[0].Width, found[0].Height]);
       // open hero page
-      gn.player.input.tap(found[0].X, found[0].Y);
+      gn.player.input.tap(found[findClosest(found)].X, found[findClosest(found)].Y);
       gn.tools.wait(2000);
       return true;
       // if(area.tap({tries:2, confirms:2})){
@@ -188,12 +207,22 @@ function OpenEquipmentInfo2Dialog(){
 				} else{
 					var foundEquipmentRed = images.equipmentRed.find({tries:2, confirms:2});
 	       
-		            if(foundEquipmentRed !== undefined){
-		            	gn.tools.wait(2000);
-      						gn.player.input.tap(foundEquipmentRed[0].X, foundEquipmentRed[0].Y-27)
-      						gn.tools.wait(2000);
-		              return true;
-		            }
+          if(foundEquipmentRed !== undefined){
+          	gn.tools.wait(2000);
+						gn.player.input.tap(foundEquipmentRed[0].X, foundEquipmentRed[0].Y-27)
+						gn.tools.wait(2000);
+            var foundEquipmentRed = images.equipmentRed.find({tries:2, confirms:2});
+            if(foundEquipmentRed !== undefined){
+               // if can craft 
+               if(images.craftButton2.find({tries:2,confirms:2})){
+                  images.craftButton2.tap({tries:2,confirms:2});
+                  return
+               }
+               gn.player.input.tap(foundEquipmentRed[0].X, foundEquipmentRed[0].Y-27)
+               gn.tools.wait(2000);
+            }
+            return true;
+          }
 				}
 	            
 	            
@@ -213,14 +242,27 @@ function OpenCraftingRequirment(){
 
 }
 function doSweepAll(){
-	gn.tools.log('doSweepAll', 0);
-	if(images.sweepAllButton.tap({tries:2, confirms:2})){
+	if(images.sweepAllButton.find({tries:2, confirms:2})){
+    images.sweepAllButton.tap({tries:2, confirms:2})
 		gn.tools.log('Done Sweep all', 0);
 		return true;
-	}
+	} 
+
 	return false;
 }
 
+
+function findClosest (data) {
+  var n = data[0].Y;
+  var index = 0;
+  for(var i = 0; i < data.length; i++){
+     if(data[i].Y < n) {
+        index = i;
+        n = data[i].Y;
+     }
+  }
+  return index;
+}
 
 function Finish(){
   gn.tools.log('Done Equipment', 0);

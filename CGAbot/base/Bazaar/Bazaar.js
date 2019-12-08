@@ -106,7 +106,7 @@ function openMenu() {
 }
 
 function bazzar() {
-  for(var k = 0; k < 5; k++){
+  for(var k = 0; k < 8; k++){
     findItems()
 
     if(images.refreshFreeBtn.tap({tries:4, confirms:2})){
